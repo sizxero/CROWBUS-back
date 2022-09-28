@@ -2,6 +2,7 @@ package com.sizxero.crowbus.entity;
 
 import javax.persistence.*;
 
+import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,10 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name="bus_id")
     private Bus bus;
+
+    @ManyToOne
+    @JoinColumn(name="driver_id")
+    private BusDriver busDriver;
 
     @ManyToOne
     @JoinColumn(name="timetable_id")
