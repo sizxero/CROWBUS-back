@@ -27,4 +27,4 @@
 
 
 ## 💾 ER Diagram
-![image](https://user-images.githubusercontent.com/51533341/192720607-1a1e0b83-40c1-4a12-a020-2636888bae89.png)
+![ERD](https://user-images.githubusercontent.com/51533341/192819596-34db0804-bcd4-4fdf-9da8-8ce57db9ddeb.jpg)
