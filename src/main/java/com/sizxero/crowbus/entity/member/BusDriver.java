@@ -8,11 +8,13 @@ import javax.persistence.OneToMany;
 import com.sizxero.crowbus.entity.Member;
 import com.sizxero.crowbus.entity.Schedule;
 import com.sizxero.crowbus.entity.Seat;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("BUSDRIVER")
-@Builder
+@SuperBuilder
 public class BusDriver extends Member {
+    @NotNull
     private String driverLicenseNo;
 
     @OneToMany
