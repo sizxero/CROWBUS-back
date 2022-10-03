@@ -19,3 +19,7 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
