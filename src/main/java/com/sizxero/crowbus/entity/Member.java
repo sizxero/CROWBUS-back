@@ -34,10 +34,6 @@ public class Member {
 
     @OneToMany
     @JoinColumn(name="member_id")
-    private List<Reservation> reservations = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name="member_id")
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany

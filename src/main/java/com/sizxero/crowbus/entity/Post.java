@@ -3,6 +3,7 @@ package com.sizxero.crowbus.entity;
 import javax.persistence.*;
 
 import com.sizxero.crowbus.entity.common.BaseTimeEntity;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private String title;
+    @NotNull
     private String content;
     private Integer hit;
 

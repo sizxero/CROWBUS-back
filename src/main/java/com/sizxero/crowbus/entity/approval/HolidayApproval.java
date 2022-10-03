@@ -1,14 +1,17 @@
-package com.sizxero.crowbus.entity;
+package com.sizxero.crowbus.entity.approval;
 
-import javax.persistence.*;
-
+import com.sizxero.crowbus.entity.common.BaseTimeEntity;
 import com.sizxero.crowbus.entity.member.BusDriver;
+import com.sizxero.crowbus.entity.member.Staff;
+import com.sizxero.crowbus.entity.type.ApprovalType;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,26 +21,18 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-public class Schedule {
+public class HolidayApproval extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private LocalDate startDay;
-    private LocalDate endDay;
+
+    private ApprovalType approvalType;
 
     @ManyToOne
-    @JoinColumn(name="bus_id")
-    private Bus bus;
+    @JoinColumn(name="staff_id")
+    private Staff staff;
 
     @ManyToOne
     @JoinColumn(name="driver_id")
     private BusDriver busDriver;
-
-    @ManyToOne
-    @JoinColumn(name="timetable_id")
-    private Timetable timetable;
-
-    @OneToMany
-    @JoinColumn(name="schedule_id")
-    private List<Seat> seats = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.sizxero.crowbus.entity;
 
 import com.sizxero.crowbus.entity.type.SeatType;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,13 +22,16 @@ public class Seat {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private LocalDate date;
+    @NotNull
     private Integer seatNo;
+    @NotNull
     private SeatType seatType;
 
     @ManyToOne
-    @JoinColumn(name="schedule_id")
-    private Schedule schedule;
+    @JoinColumn(name="drive_id")
+    private Drive drive;
 
     @OneToMany
     @JoinColumn(name="seat_id")

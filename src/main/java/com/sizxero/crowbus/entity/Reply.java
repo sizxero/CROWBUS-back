@@ -18,6 +18,7 @@ public class Reply extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private String content;
 
     @ManyToOne

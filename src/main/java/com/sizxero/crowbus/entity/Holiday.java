@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -17,16 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-public class Bus {
+
+public class Holiday {
     @Id
     @GeneratedValue
     private Long id;
     @NotNull
-    private String name;
-    @NotNull
-    private Integer capacity;
+    private Date date;
 
-    @OneToMany
-    @JoinColumn(name="bus_id")
-    private List<Drive> drives = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="drive_id")
+    private Drive drive;
 }

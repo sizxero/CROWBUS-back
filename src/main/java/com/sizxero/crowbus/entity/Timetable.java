@@ -21,9 +21,10 @@ public class Timetable {
     @Id
     @GeneratedValue
     private Long id;
+    @NotNull
     private String place;
     @Temporal(TemporalType.TIME)
-    private Date departureTime;
+    private Date time;
 
     @ManyToOne
     @JoinColumn(name="route_id")

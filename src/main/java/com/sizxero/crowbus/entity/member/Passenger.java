@@ -1,15 +1,18 @@
 package com.sizxero.crowbus.entity.member;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import com.sizxero.crowbus.entity.Member;
+import com.sizxero.crowbus.entity.Reservation;
+import com.sizxero.crowbus.entity.Route;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +20,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Entity
 @SuperBuilder
-@DiscriminatorValue("PASSENGER")
+@DiscriminatorValue("P")
 public class Passenger extends Member {
-    private String favoriteRoute;
+
+    @ManyToOne
+    @JoinColumn(name="favorite_route")
+    private Route favoriteRoute;
+
+    @OneToMany
+    @JoinColumn(name="passenger_id")
+    private List<Reservation> reservations = new ArrayList<>();
 }

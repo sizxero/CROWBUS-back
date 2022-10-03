@@ -1,7 +1,9 @@
 package com.sizxero.crowbus.dto.member.signup;
 
 import com.sizxero.crowbus.entity.Member;
+import com.sizxero.crowbus.entity.Route;
 import com.sizxero.crowbus.entity.member.Passenger;
+import com.sizxero.crowbus.entity.type.RouteType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +27,7 @@ public class PassengerDTO {
         this.pw = entity.getPw();
         this.name = entity.getPw();
         this.phone = entity.getPhone();
-        this.favoriteRoute = entity.getFavoriteRoute();
+        this.favoriteRoute = entity.getFavoriteRoute().getName();
     }
 
     public static Passenger toEntity(final PassengerDTO dto){
@@ -35,7 +37,7 @@ public class PassengerDTO {
                 .pw(dto.getPw())
                 .name(dto.getName())
                 .phone(dto.getPhone())
-                .favoriteRoute(dto.getFavoriteRoute())
+                .favoriteRoute(new Route(dto.getFavoriteRoute()))
                 .build();
     }
 }

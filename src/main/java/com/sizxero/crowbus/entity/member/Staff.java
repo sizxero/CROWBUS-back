@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import com.sizxero.crowbus.entity.Drive;
 import com.sizxero.crowbus.entity.Member;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,13 +21,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("B")
+@DiscriminatorValue("S")
 @SuperBuilder
-public class BusDriver extends Member {
+public class Staff extends Member {
     @NotNull
-    private String driverLicenseNo;
+    private String empNo;
 
-    @OneToMany
-    @JoinColumn(name="driver_id")
-    private List<Drive> drives = new ArrayList<>();
+    @NotNull
+    private String department;
 }
