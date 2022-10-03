@@ -15,10 +15,20 @@
         ㄴ main
             ㄴ java
                 ㄴ com.sizxero.crowbus
+                    ㄴ config
+                    ㄴ controller
+                    ㄴ dto
+                        ㄴ member
+                            ㄴ signup
+                        ㄴ reservation
                     ㄴ entity
+                        ㄴ approval
                         ㄴ common
                         ㄴ member
                         ㄴ type
+                    ㄴ repository
+                    ㄴ security
+                    ㄴ service
                     ㄴ CrowbusApplication.java
 
             ㄴ resource
