@@ -5,16 +5,14 @@ import javax.persistence.*;
 import com.sizxero.crowbus.entity.member.Passenger;
 import com.sizxero.crowbus.entity.type.RouteType;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -35,11 +33,11 @@ public class Route {
         this.name = name;
     }
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="p_favorite_route")
     private List<Passenger> passengers = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="t_route_id")
     private List<Timetable> timetables = new ArrayList<>();
 }

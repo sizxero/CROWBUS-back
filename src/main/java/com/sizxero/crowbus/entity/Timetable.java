@@ -3,20 +3,19 @@ package com.sizxero.crowbus.entity;
 import javax.persistence.*;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
+@ToString
 public class Timetable {
     @Id
     @GeneratedValue
@@ -29,7 +28,15 @@ public class Timetable {
     @Temporal(TemporalType.TIME)
     private Date arrivalTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="t_route_id")
     private Route route;
+
+    public void setRoute(Route route){
+        if(this.route != null){
+            route.getTimetables().remove(this);
+        }
+        this.route = route;
+        this.route.getTimetables().add(this);
+    }
 }
