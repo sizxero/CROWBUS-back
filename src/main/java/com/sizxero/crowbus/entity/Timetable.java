@@ -20,13 +20,16 @@ import java.util.List;
 public class Timetable {
     @Id
     @GeneratedValue
+    @Column(name="t_id")
     private Long id;
     @NotNull
+    @Column(name="t_place", length = 50)
     private String place;
+    @Column(name="t_arrival_time")
     @Temporal(TemporalType.TIME)
-    private Date time;
+    private Date arrivalTime;
 
     @ManyToOne
-    @JoinColumn(name="route_id")
+    @JoinColumn(name="t_route_id")
     private Route route;
 }

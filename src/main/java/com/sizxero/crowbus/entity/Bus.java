@@ -20,13 +20,16 @@ import java.util.List;
 public class Bus {
     @Id
     @GeneratedValue
+    @Column(name="b_id")
     private Long id;
     @NotNull
-    private String name;
+    @Column(name="b_busnum", length = 20)
+    private String busNum;
     @NotNull
+    @Column(name="b_capacity")
     private Integer capacity;
 
     @OneToMany
-    @JoinColumn(name="bus_id")
+    @JoinColumn(name="d_bus_id")
     private List<Drive> drives = new ArrayList<>();
 }

@@ -22,10 +22,13 @@ import java.util.List;
 public class Route {
     @Id
     @GeneratedValue
+    @Column(name="rt_id")
     private Long id;
     @NotNull
+    @Column(name="rt_name", length = 50)
     private String name;
     @NotNull
+    @Column(name="rt_route_type", length = 50)
     private RouteType routeType;
 
     public Route(String name) {
@@ -33,10 +36,10 @@ public class Route {
     }
 
     @OneToMany
-    @JoinColumn(name="favorite_route")
+    @JoinColumn(name="p_favorite_route")
     private List<Passenger> passengers = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name="route_id")
+    @JoinColumn(name="t_route_id")
     private List<Timetable> timetables = new ArrayList<>();
 }

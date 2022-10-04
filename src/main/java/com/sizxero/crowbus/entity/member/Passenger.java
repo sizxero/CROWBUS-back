@@ -24,10 +24,10 @@ import java.util.List;
 public class Passenger extends Member {
 
     @ManyToOne
-    @JoinColumn(name="favorite_route")
+    @JoinColumn(name="p_favorite_route")
     private Route favoriteRoute;
 
     @OneToMany
-    @JoinColumn(name="passenger_id")
+    @JoinColumn(name="rv_passenger_id")
     private List<Reservation> reservations = new ArrayList<>();
 }

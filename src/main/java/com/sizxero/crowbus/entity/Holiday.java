@@ -17,15 +17,16 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-
 public class Holiday {
     @Id
     @GeneratedValue
+    @Column(name="h_id")
     private Long id;
     @NotNull
+    @Column(name="h_date")
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name="drive_id")
+    @JoinColumn(name="h_drive_id")
     private Drive drive;
 }

@@ -19,15 +19,17 @@ import lombok.NoArgsConstructor;
 public class Reservation extends BaseTimeEntity {
     @Id
     @GeneratedValue
+    @Column(name="rv_id")
     private Long id;
     @NotNull
+    @Column(name="rv_reservation_type")
     private ReservationType reservationType;
 
     @ManyToOne
-    @JoinColumn(name="passenger_id")
+    @JoinColumn(name="rv_passenger_id")
     private Passenger passenger;
 
     @ManyToOne
-    @JoinColumn(name="seat_id")
+    @JoinColumn(name="rv_seat_id")
     private Seat seat;
 }

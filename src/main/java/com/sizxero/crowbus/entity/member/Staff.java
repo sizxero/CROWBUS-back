@@ -1,9 +1,6 @@
 package com.sizxero.crowbus.entity.member;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.sizxero.crowbus.entity.Member;
 import com.sun.istack.NotNull;
@@ -25,8 +22,10 @@ import java.util.List;
 @SuperBuilder
 public class Staff extends Member {
     @NotNull
+    @Column(name="s_emp_no", length=20)
     private String empNo;
 
     @NotNull
+    @Column(name="s_department", length=30)
     private String department;
 }

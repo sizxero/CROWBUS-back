@@ -21,19 +21,23 @@ import java.util.List;
 public class Seat {
     @Id
     @GeneratedValue
+    @Column(name="s_id")
     private Long id;
     @NotNull
+    @Column(name="s_date")
     private LocalDate date;
     @NotNull
+    @Column(name="s_seat_no")
     private Integer seatNo;
     @NotNull
+    @Column(name="s_seat_type")
     private SeatType seatType;
 
     @ManyToOne
-    @JoinColumn(name="drive_id")
+    @JoinColumn(name="s_drive_id")
     private Drive drive;
 
     @OneToMany
-    @JoinColumn(name="seat_id")
+    @JoinColumn(name="rv_seat_id")
     private List<Reservation> reservations = new ArrayList<>();
 }

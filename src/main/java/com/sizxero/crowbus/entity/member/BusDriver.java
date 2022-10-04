@@ -1,9 +1,6 @@
 package com.sizxero.crowbus.entity.member;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.sizxero.crowbus.entity.Drive;
 import com.sizxero.crowbus.entity.Member;
@@ -22,13 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("B")
+@DiscriminatorValue("D")
 @SuperBuilder
 public class BusDriver extends Member {
     @NotNull
+    @Column(name="d_driver_license_no", length = 30)
     private String driverLicenseNo;
 
     @OneToMany
-    @JoinColumn(name="driver_id")
+    @JoinColumn(name="d_driver_id")
     private List<Drive> drives = new ArrayList<>();
 }
