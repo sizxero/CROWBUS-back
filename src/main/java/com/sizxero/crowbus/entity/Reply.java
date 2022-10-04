@@ -23,11 +23,11 @@ public class Reply extends BaseTimeEntity {
     @Column(name="rp_content")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_post_id")
     private Post post;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_member_id")
     private Member member;
 }

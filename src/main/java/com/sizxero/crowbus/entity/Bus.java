@@ -29,7 +29,7 @@ public class Bus {
     @Column(name="b_capacity")
     private Integer capacity;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="d_bus_id")
     private List<Drive> drives = new ArrayList<>();
 }

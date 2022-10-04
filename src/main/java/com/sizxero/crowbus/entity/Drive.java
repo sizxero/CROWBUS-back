@@ -27,23 +27,23 @@ public class Drive {
     @Column(name="d_end_day")
     private LocalDate endDay;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="d_bus_id")
     private Bus bus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="d_driver_id")
     private BusDriver busDriver;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="d_route_id")
     private Route route;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="s_drive_id")
     private List<Seat> seats = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="h_drive_id")
     private List<Holiday> holidays = new ArrayList<>();
 }

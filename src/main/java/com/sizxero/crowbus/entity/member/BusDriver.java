@@ -26,7 +26,7 @@ public class BusDriver extends Member {
     @Column(name="d_driver_license_no", length = 30)
     private String driverLicenseNo;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="d_driver_id")
     private List<Drive> drives = new ArrayList<>();
 }

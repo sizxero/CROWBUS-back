@@ -26,7 +26,7 @@ public class Holiday {
     @Column(name="h_date")
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="h_drive_id")
     private Drive drive;
 }

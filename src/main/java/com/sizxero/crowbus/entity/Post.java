@@ -35,11 +35,11 @@ public class Post extends BaseTimeEntity {
     @Column(name="p_hit")
     private Integer hit;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_post_id")
     private List<Reply> replies = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="p_member_id")
     private Member member;
 }

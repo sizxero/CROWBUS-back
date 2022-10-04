@@ -25,11 +25,11 @@ public class Reservation extends BaseTimeEntity {
     @Column(name="rv_reservation_type")
     private ReservationType reservationType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="rv_passenger_id")
     private Passenger passenger;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="rv_seat_id")
     private Seat seat;
 }

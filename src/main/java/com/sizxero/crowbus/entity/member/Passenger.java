@@ -23,11 +23,11 @@ import java.util.List;
 @DiscriminatorValue("P")
 public class Passenger extends Member {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="p_favorite_route")
     private Route favoriteRoute;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rv_passenger_id")
     private List<Reservation> reservations = new ArrayList<>();
 }

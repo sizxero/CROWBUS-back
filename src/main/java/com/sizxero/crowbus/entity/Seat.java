@@ -33,11 +33,11 @@ public class Seat {
     @Column(name="s_seat_type")
     private SeatType seatType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="s_drive_id")
     private Drive drive;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rv_seat_id")
     private List<Reservation> reservations = new ArrayList<>();
 }

@@ -37,11 +37,11 @@ public class Member {
     @Column(name="m_phone", length = 30)
     private String phone;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="p_member_id")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_member_id")
     private List<Reply> replies = new ArrayList<>();
 }
