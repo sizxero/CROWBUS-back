@@ -3,15 +3,15 @@ package com.sizxero.crowbus.controller;
 import com.sizxero.crowbus.dto.ResponseDTO;
 import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.entity.Drive;
-import com.sizxero.crowbus.service.BusService;
-import com.sizxero.crowbus.service.DriveService;
-import com.sizxero.crowbus.service.MemberService;
-import com.sizxero.crowbus.service.RouteService;
+import com.sizxero.crowbus.entity.Seat;
+import com.sizxero.crowbus.entity.type.SeatType;
+import com.sizxero.crowbus.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +30,9 @@ public class DriveController {
 
     @Autowired
     private RouteService routeService;
+    
+    @Autowired
+    private SeatService seatService;
 
     @PostMapping
     public ResponseEntity<?> createDrive(@RequestBody DriveDTO dto) {
@@ -43,6 +46,19 @@ public class DriveController {
                     .route(routeService.readOneRouteById(dto.getRouteId()).get())
                     .build();
             Optional<Drive> result = driveService.createDrive(entity);
+            LocalDate start = dto.getStartDay();
+            LocalDate end = dto.getEndDay().plusDays(1);
+            for (LocalDate d = start; d.isBefore(end); d = d.plusDays(1)) {
+                for(int i = 1; i<= 45; i++) {
+                    Seat seatEntity = Seat.builder()
+                            .date(d)
+                            .seatNo(i)
+                            .seatType(SeatType.예약가능)
+                            .drive(entity)
+                            .build();
+                    seatService.createSeat(seatEntity);
+                }
+            }
             List<DriveDTO> dtos = result.stream().map(v ->
                     DriveDTO.builder()
                             .id(v.getId())
