@@ -5,7 +5,9 @@ import com.sizxero.crowbus.dto.reservation.ReservationCreateDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationReadDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationUpdateDTO;
 import com.sizxero.crowbus.entity.Reservation;
+import com.sizxero.crowbus.entity.Seat;
 import com.sizxero.crowbus.entity.type.ReservationType;
+import com.sizxero.crowbus.entity.type.SeatType;
 import com.sizxero.crowbus.service.MemberService;
 import com.sizxero.crowbus.service.ReservationService;
 import com.sizxero.crowbus.service.SeatService;
@@ -39,6 +41,9 @@ public class ReservationController {
                     .seat(seatService.readOneSeat(dto.getSeatId()).get())
                     .build();
             Optional<Reservation> result = reservationService.createReservation(entity);
+            Seat seat = seatService.readOneSeat(dto.getSeatId()).get();
+            seat.setSeatType(SeatType.예약불가);
+            seatService.update(seat);
             return ResponseEntity.ok().body(
                     ResponseDTO.<ReservationReadDTO>builder()
                             .data(result.stream().map(v ->
@@ -91,6 +96,12 @@ public class ReservationController {
                     .reservationType(dto.getRvType())
                     .build();
             Optional<Reservation> result = reservationService.update(newRv);
+            if(dto.getRvType().equals(ReservationType.예약취소)) {
+                Seat seat = seatService.readOneSeat(dto.getSeatId()).get();
+                seat.setSeatType(SeatType.예약가능);
+                seatService.update(seat);
+            }
+            reservationService.update(newRv);
             return ResponseEntity.ok()
                     .body(ResponseDTO.<ReservationReadDTO>builder()
                             .data(result.stream().map(v ->

@@ -1,7 +1,10 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.reservation.ReservationReadDTO;
 import com.sizxero.crowbus.dto.seat.SeatDTO;
+import com.sizxero.crowbus.dto.seat.SeatUpdateDTO;
+import com.sizxero.crowbus.entity.Reservation;
 import com.sizxero.crowbus.entity.Seat;
 import com.sizxero.crowbus.service.DriveService;
 import com.sizxero.crowbus.service.SeatService;
@@ -51,11 +54,13 @@ public class SeatController {
     }
 
     @GetMapping
-    public ResponseEntity<?> readSeat(@RequestParam String date, @RequestParam String dvid) {
+    public ResponseEntity<?> readSeat(@RequestParam String date, @RequestParam String dvid, @RequestParam(required = false) String rsv) {
         try {
-            log.info(LocalDate.parse(date, DateTimeFormatter.ISO_DATE).toString());
-            List<Seat> result = seatService.readSeats(LocalDate.parse(date, DateTimeFormatter.ISO_DATE), dvid);
-            log.info(String.valueOf(result.size()));
+            List<Seat> result;
+            if(rsv == null || rsv.equals(""))
+                result = seatService.readSeats(LocalDate.parse(date, DateTimeFormatter.ISO_DATE), dvid);
+            else
+                result = seatService.readSeatsReservated(LocalDate.parse(date, DateTimeFormatter.ISO_DATE), dvid);
             return ResponseEntity.ok()
                     .body(ResponseDTO.<SeatDTO>builder().data(
                             result.stream().map(v ->
@@ -66,6 +71,28 @@ public class SeatController {
                                             .driveId(v.getDrive().getId())
                                             .build()).toList()
                     ).build());
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateSeat(@RequestBody SeatUpdateDTO dto) {
+        try {
+            Seat newSeat = seatService.readOneSeat(dto.getId()).get();
+            newSeat.setSeatType(dto.getSeatType());
+            Optional<Seat> result = seatService.update(newSeat);
+            return ResponseEntity.ok()
+                    .body(ResponseDTO.<SeatDTO>builder()
+                            .data(result.stream().map(v ->
+                                            SeatDTO.builder()
+                                                    .date(v.getDate())
+                                                    .seatNo(v.getSeatNo())
+                                                    .seatType(v.getSeatType())
+                                                    .driveId(v.getDrive().getId())
+                                                    .build())
+                                    .toList())
+                            .build());
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
