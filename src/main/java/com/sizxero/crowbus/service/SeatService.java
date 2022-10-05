@@ -46,6 +46,10 @@ public class SeatService {
         }
     }
 
+    public Optional<Seat> readOneSeat(Long id) {
+        return seatRepository.findById(id);
+    }
+
     public List<Seat> readSeats(LocalDate date, String id) {
         Drive drive = driveRepository.findById(Long.parseLong(id)).get();
         return seatRepository.findSeatsByDateAndDrive(date, drive);
