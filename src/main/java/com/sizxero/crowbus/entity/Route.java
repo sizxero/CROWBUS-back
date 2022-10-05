@@ -40,4 +40,8 @@ public class Route {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="t_route_id")
     private List<Timetable> timetables = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="p_route_id")
+    private List<Post> posts = new ArrayList<>();
 }

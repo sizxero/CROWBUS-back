@@ -1,5 +1,6 @@
 package com.sizxero.crowbus.service;
 
+import com.sizxero.crowbus.entity.Member;
 import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sizxero.crowbus.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    public Optional<Member> readOneMember(Long id) { return memberRepository.findById(id); }
     public Optional<BusDriver> readOneBusDriver(Long id) {
         return memberRepository.findBusDriverById(id);
     }
