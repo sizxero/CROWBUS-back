@@ -4,40 +4,18 @@ import com.sizxero.crowbus.entity.Member;
 import com.sizxero.crowbus.entity.Route;
 import com.sizxero.crowbus.entity.member.Passenger;
 import com.sizxero.crowbus.entity.type.RouteType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class PassengerDTO {
     private Long id;
     private String loginId;
     private String pw;
     private String name;
     private String phone;
-    private String favoriteRoute;
-
-    public PassengerDTO(final Passenger entity) {
-        this.id = entity.getId();
-        this.loginId = entity.getLoginId();
-        this.pw = entity.getPw();
-        this.name = entity.getPw();
-        this.phone = entity.getPhone();
-        this.favoriteRoute = entity.getFavoriteRoute().getName();
-    }
-
-    public static Passenger toEntity(final PassengerDTO dto){
-        return Passenger.builder()
-                .id(dto.getId())
-                .loginId(dto.getLoginId())
-                .pw(dto.getPw())
-                .name(dto.getName())
-                .phone(dto.getPhone())
-                .favoriteRoute(new Route(dto.getFavoriteRoute()))
-                .build();
-    }
+    private Long favoriteRouteId;
 }

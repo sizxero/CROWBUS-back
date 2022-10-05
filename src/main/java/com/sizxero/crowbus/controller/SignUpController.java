@@ -3,8 +3,11 @@ package com.sizxero.crowbus.controller;
 import com.sizxero.crowbus.dto.ResponseDTO;
 import com.sizxero.crowbus.dto.member.signup.BusDriverDTO;
 import com.sizxero.crowbus.dto.member.signup.PassengerDTO;
+import com.sizxero.crowbus.entity.Member;
+import com.sizxero.crowbus.entity.Route;
 import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sizxero.crowbus.entity.member.Passenger;
+import com.sizxero.crowbus.service.RouteService;
 import com.sizxero.crowbus.service.SignUpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,36 +26,74 @@ import java.util.stream.Collectors;
 @RequestMapping("signup")
 public class SignUpController {
     @Autowired
-    private SignUpService service;
+    private SignUpService signupService;
+
+    @Autowired
+    private RouteService routeService;
 
     @PostMapping("/passenger")
-    public ResponseEntity<?> signupPassenger(@RequestBody PassengerDTO requestDto){
+    public ResponseEntity<?> signupPassenger(@RequestBody PassengerDTO dto){
         try {
-            Passenger entity = PassengerDTO.toEntity(requestDto);
-            Optional<Passenger> result = service.signupPassenger(entity);
-            List<PassengerDTO> dtos =
-                    result.stream().map(PassengerDTO::new).collect(Collectors.toList());
-            ResponseDTO<PassengerDTO> response = ResponseDTO.<PassengerDTO>builder().data(dtos).build();
-            log.info("response dto ok");
-            return ResponseEntity.ok().body(response);
+            Route fr;
+            try {
+                fr = routeService.readOneRouteById(dto.getFavoriteRouteId()).get();
+            } catch(Exception e) {
+                fr = null;
+            }
+            Passenger entity = Passenger.builder()
+                    .id(dto.getId())
+                    .name(dto.getName())
+                    .loginId(dto.getLoginId())
+                    .pw(dto.getPw())
+                    .phone(dto.getPhone())
+                    .favoriteRoute(fr)
+                    .build();
+
+            Optional<Passenger> result = signupService.signupPassenger(entity);
+
+            return ResponseEntity.ok()
+                    .body(ResponseDTO.<PassengerDTO>builder()
+                            .data(result.stream().map(v->
+                                    PassengerDTO.builder()
+                                            .id(v.getId())
+                                            .loginId(v.getLoginId())
+                                            .pw(v.getPw())
+                                            .name(v.getName())
+                                            .phone(v.getPhone())
+                                            .favoriteRouteId(v.getFavoriteRoute() != null ? v.getFavoriteRoute().getId(): null)
+                                            .build()
+                                    ).toList())
+                            .build());
         } catch(Exception e) {
-            String err = e.getMessage();
-            ResponseDTO<PassengerDTO> response =
-                    ResponseDTO.<PassengerDTO>builder().error(err).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(ResponseDTO.builder().error(e.getMessage()).build());
         }
     }
 
     @PostMapping("/busdriver")
-    public ResponseEntity<?> signupBusDriver(@RequestBody BusDriverDTO requestDto){
+    public ResponseEntity<?> signupBusDriver(@RequestBody BusDriverDTO dto){
         try {
-            BusDriver entity = BusDriverDTO.toEntity(requestDto);
-            Optional<BusDriver> result = service.signupBusDriver(entity);
-            List<BusDriverDTO> dtos =
-                    result.stream().map(BusDriverDTO::new).collect(Collectors.toList());
-            ResponseDTO<BusDriverDTO> response = ResponseDTO.<BusDriverDTO>builder().data(dtos).build();
-            log.info("response dto ok");
-            return ResponseEntity.ok().body(response);
+            BusDriver entity = BusDriver.builder()
+                    .id(dto.getId())
+                    .name(dto.getName())
+                    .loginId(dto.getLoginId())
+                    .pw(dto.getPw())
+                    .phone(dto.getPhone())
+                    .driverLicenseNo(dto.getDriverLicenseNo())
+                    .build();
+            Optional<BusDriver> result = signupService.signupBusDriver(entity);
+            return ResponseEntity.ok()
+                    .body(ResponseDTO.<BusDriverDTO>builder()
+                            .data(result.stream().map(v->
+                                    BusDriverDTO.builder()
+                                            .id(v.getId())
+                                            .loginId(v.getLoginId())
+                                            .pw(v.getPw())
+                                            .name(v.getName())
+                                            .phone(v.getPhone())
+                                            .driverLicenseNo(v.getDriverLicenseNo())
+                                            .build()
+                            ).toList())
+                            .build());
         } catch(Exception e) {
             String err = e.getMessage();
             ResponseDTO<BusDriverDTO> response =
