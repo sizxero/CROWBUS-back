@@ -17,7 +17,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     String findNameByLoginId(String loginId);
     // 아이디로 회원 정보 조회
     Member findByLoginId(String loginId);
-
     Optional<Passenger> findPassengerById(long id);
     Optional<BusDriver> findBusDriverById(long id);
 }
