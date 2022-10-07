@@ -57,30 +57,34 @@ public class RouteController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-//
-//    @GetMapping
-//    public ResponseEntity<?> readRoutes(@RequestParam(required = false) String type) {
-//        try {
-//            List<Route> result;
-//            if(type == null || type.equals(""))
-//                result = routeService.readAllRoute();
-//            else {
-//                RouteType rt = RouteType.values()[Integer.parseInt(type)];
-//                result = routeService.readRoutesByRouteType(rt);
-//            }
-//            List<RouteDTO> dtos =
-//                    result.stream().map(RouteDTO::new).collect(Collectors.toList());
-//            ResponseDTO<RouteDTO> response = ResponseDTO.<RouteDTO>builder().data(dtos).build();
-//            log.info("response dto ok");
-//            return ResponseEntity.ok().body(response);
-//        } catch(Exception e) {
-//            String err = e.getMessage();
-//            ResponseDTO<RouteDTO> response =
-//                    ResponseDTO.<RouteDTO>builder().error(err).build();
-//            return ResponseEntity.badRequest().body(response);
-//        }
-//    }
-//
+
+    @GetMapping
+    public ResponseEntity<?> readAllRoutes(@RequestParam(required = false) String type) {
+        try {
+            List<Route> result;
+            if(type == null || type.equals(""))
+                result = routeService.readAllRoute();
+            else {
+                RouteType rt = RouteType.values()[Integer.parseInt(type)];
+                result = routeService.readRoutesByRouteType(rt);
+            }
+            List<RouteDTO> dtos =
+                    result.stream().map(v -> RouteDTO.builder()
+                            .id(v.getId())
+                            .name(v.getName())
+                            .routeType(v.getRouteType().name())
+                            .build()).collect(Collectors.toList());
+            ResponseDTO<RouteDTO> response = ResponseDTO.<RouteDTO>builder().data(dtos).build();
+            log.info("response dto ok");
+            return ResponseEntity.ok().body(response);
+        } catch(Exception e) {
+            String err = e.getMessage();
+            ResponseDTO<RouteDTO> response =
+                    ResponseDTO.<RouteDTO>builder().error(err).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> readRoute(@PathVariable String id) {
         try {
