@@ -32,6 +32,7 @@ public class LoginController {
             final LoginDTO resdto = LoginDTO.builder()
                     .token(token)
                     .loginId(entity.getLoginId())
+                    .role(entity.getRoleType())
                     .build();
             return ResponseEntity.ok().body(resdto);
         } else {

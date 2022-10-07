@@ -2,9 +2,9 @@ package com.sizxero.crowbus.entity;
 
 import javax.persistence.*;
 
+import com.sizxero.crowbus.entity.type.RoleType;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,7 +17,6 @@ import java.util.List;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "MTYPE", length=1)
 @SuperBuilder
 public class Member {
     @Id
@@ -36,6 +35,9 @@ public class Member {
     @NotNull
     @Column(name="m_phone", length = 30)
     private String phone;
+    @NotNull
+    @Column(name="m_type")
+    private RoleType roleType;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="p_member_id")

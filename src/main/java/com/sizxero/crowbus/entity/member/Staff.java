@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("S")
 @SuperBuilder
 public class Staff extends Member {
     @NotNull

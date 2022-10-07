@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("D")
 @SuperBuilder
 public class BusDriver extends Member {
     @NotNull

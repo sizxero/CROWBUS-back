@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @SuperBuilder
-@DiscriminatorValue("P")
 public class Passenger extends Member {
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -7,6 +7,7 @@ import com.sizxero.crowbus.entity.Member;
 import com.sizxero.crowbus.entity.Route;
 import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sizxero.crowbus.entity.member.Passenger;
+import com.sizxero.crowbus.entity.type.RoleType;
 import com.sizxero.crowbus.service.RouteService;
 import com.sizxero.crowbus.service.SignUpService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class SignUpController {
             }
             Passenger entity = Passenger.builder()
                     .id(dto.getId())
+                    .roleType(RoleType.PASSENGER)
                     .name(dto.getName())
                     .loginId(dto.getLoginId())
                     .pw(dto.getPw())
@@ -74,6 +76,7 @@ public class SignUpController {
         try {
             BusDriver entity = BusDriver.builder()
                     .id(dto.getId())
+                    .roleType(RoleType.BUSDRIVER)
                     .name(dto.getName())
                     .loginId(dto.getLoginId())
                     .pw(dto.getPw())
