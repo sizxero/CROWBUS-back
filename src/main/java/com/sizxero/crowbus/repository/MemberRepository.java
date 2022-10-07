@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
     // 로그인 성공, 실패 여부
-    boolean existsMemberByLoginIdAndPw(String loginId, String pw);
     Member findMemberByLoginIdAndPw(String loginId, String pw);
     // 아이디 중복 체크
     boolean existsMemberByLoginId(String loginId);
     // 아이디로 이름 찾기
+    @Query("Select m.name from Member m where m.loginId=?1")
     String findNameByLoginId(String loginId);
     // 아이디로 회원 정보 조회
     Optional<Member> findByLoginId(String loginId);

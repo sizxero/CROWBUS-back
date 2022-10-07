@@ -17,8 +17,9 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    public String readNameByLoginId(String loginId) { return memberRepository.findNameByLoginId(loginId); }
     public RoleType findRoleTypeByLoginId(String loginId) { return memberRepository.findRoleTypeByLoginId(loginId); }
-    public Optional<Member> readOneMemberByLoginId(String loginId) { return memberRepository.findByLoginId(loginId); }
+    public boolean existLoginId(String loginId) { return memberRepository.existsMemberByLoginId(loginId); }
     public Optional<Member> readOneMember(Long id) { return memberRepository.findById(id); }
     public Optional<Passenger> readOnePassenger(Long id) {
         return memberRepository.findPassengerById(id);

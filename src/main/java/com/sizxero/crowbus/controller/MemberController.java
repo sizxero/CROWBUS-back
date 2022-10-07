@@ -11,10 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +61,26 @@ public class MemberController {
                 return ResponseEntity.badRequest().body("미구현");
             }
         } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<?> readNameByLoginId(@AuthenticationPrincipal String id) {
+        try {
+            String result = memberService.readNameByLoginId(id);
+            return ResponseEntity.ok().body(result);
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/id/{loginId}")
+    public ResponseEntity<?> isExistLoginId(@PathVariable String loginId) {
+        try {
+            boolean result = memberService.existLoginId(loginId);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
