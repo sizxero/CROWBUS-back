@@ -1,8 +1,11 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.member.mypage.BusDriverReadDTO;
+import com.sizxero.crowbus.dto.member.mypage.PassengerReadDTO;
 import com.sizxero.crowbus.dto.member.signup.BusDriverDTO;
 import com.sizxero.crowbus.dto.member.signup.PassengerDTO;
+import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sizxero.crowbus.entity.member.Passenger;
 import com.sizxero.crowbus.entity.type.RoleType;
@@ -29,31 +32,35 @@ public class MemberController {
         try {
             if (memberService.findRoleTypeByLoginId(id).equals(RoleType.PASSENGER)) {
                 Optional<Passenger> result = memberService.readOnePassengerByLoginId(id);
-                List<PassengerDTO> dtos = result.stream().map(v ->
-                        PassengerDTO.builder()
-                                .id(v.getId())
+                List<PassengerReadDTO> dtos = result.stream().map(v ->
+                        PassengerReadDTO.builder()
                                 .loginId(v.getLoginId())
                                 .name(v.getName())
                                 .phone(v.getPhone())
-                                .favoriteRouteId(v.getFavoriteRoute() == null ? null : v.getFavoriteRoute().getId())
+                                .favoriteRoute(v.getFavoriteRoute() == null
+                                        ? null
+                                        : RouteDTO.builder()
+                                        .id(v.getFavoriteRoute().getId())
+                                        .name(v.getFavoriteRoute().getName())
+                                        .routeType(v.getFavoriteRoute().getRouteType().name())
+                                        .build())
                                 .build()).toList();
                 return ResponseEntity.ok().body(
-                        ResponseDTO.<PassengerDTO>builder()
+                        ResponseDTO.<PassengerReadDTO>builder()
                                 .data(dtos)
                                 .build()
                 );
             } else if(memberService.findRoleTypeByLoginId(id).equals(RoleType.BUSDRIVER)) {
                 Optional<BusDriver> result = memberService.readOneBusDriverByLoginId(id);
-                List<BusDriverDTO> dtos = result.stream().map(v ->
-                        BusDriverDTO.builder()
-                                .id(v.getId())
+                List<BusDriverReadDTO> dtos = result.stream().map(v ->
+                        BusDriverReadDTO.builder()
                                 .loginId(v.getLoginId())
                                 .name(v.getName())
                                 .phone(v.getPhone())
-                                .driverLicenseNo(v.getDriverLicenseNo())
+                                .license(v.getDriverLicenseNo())
                                 .build()).toList();
                 return ResponseEntity.ok().body(
-                        ResponseDTO.<BusDriverDTO>builder()
+                        ResponseDTO.<BusDriverReadDTO>builder()
                                 .data(dtos)
                                 .build()
                 );
