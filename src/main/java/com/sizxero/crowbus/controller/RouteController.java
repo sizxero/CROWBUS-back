@@ -69,10 +69,21 @@ public class RouteController {
                 result = routeService.readRoutesByRouteType(rt);
             }
             List<RouteDTO> dtos =
-                    result.stream().map(v -> RouteDTO.builder()
+                    result.stream().map(v ->
+                        RouteDTO.builder()
                             .id(v.getId())
                             .name(v.getName())
                             .routeType(v.getRouteType().name())
+                            .timetables(timetableService.readTimetableById(v.getId()).stream().map(
+                                    vv ->
+                                            TimetableDTO.builder()
+                                                    .routeId(vv.getRoute().getId())
+                                                    .order(vv.getOrder())
+                                                    .arrivalTime(vv.getArrivalTime() != null ? new java.sql.Timestamp(vv.getArrivalTime().getTime()).toLocalDateTime() : null)
+                                                    .place(vv.getPlace())
+                                                    .timetableId(vv.getId())
+                                                    .build()
+                            ).toList())
                             .build()).collect(Collectors.toList());
             ResponseDTO<RouteDTO> response = ResponseDTO.<RouteDTO>builder().data(dtos).build();
             log.info("response dto ok");
@@ -92,7 +103,8 @@ public class RouteController {
             List<TimetableDTO> ttdtos = timetableService.readTimetableById(Long.parseLong(id)).stream().map(v ->
                 TimetableDTO.builder()
                         .routeId(v.getRoute().getId())
-                        .arrivalTime(new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime())
+                        .order(v.getOrder())
+                        .arrivalTime(v.getArrivalTime() != null ? new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime() : null)
                         .place(v.getPlace())
                         .timetableId(v.getId())
                         .build()

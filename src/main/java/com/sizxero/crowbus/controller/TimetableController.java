@@ -32,8 +32,9 @@ public class TimetableController {
     public ResponseEntity<?> createTimetable(@RequestBody TimetableDTO requestDto) {
         try {
             Timetable entity = Timetable.builder()
+                    .order(requestDto.getOrder())
                     .place(requestDto.getPlace())
-                    .arrivalTime(java.sql.Timestamp.valueOf(requestDto.getArrivalTime()))
+                    .arrivalTime(requestDto.getArrivalTime() != null ? java.sql.Timestamp.valueOf(requestDto.getArrivalTime()) : null)
                     .build();
             entity.setRoute(routeService.readOneRouteById(requestDto.getRouteId()).get());
             Optional<Timetable> result = timetableService.createTimetable(entity);
@@ -42,7 +43,8 @@ public class TimetableController {
                             TimetableDTO.builder()
                                     .timetableId(v.getId())
                                     .place(v.getPlace())
-                                    .arrivalTime(v.getArrivalTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                                    .order(v.getOrder())
+                                    .arrivalTime(v.getArrivalTime() != null ? v.getArrivalTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() : null)
                                     .routeId(v.getRoute().getId())
                                     .build()).collect(Collectors.toList());
             ResponseDTO<TimetableDTO> response = ResponseDTO.<TimetableDTO>builder().data(dtos).build();
@@ -64,7 +66,8 @@ public class TimetableController {
                             .timetableId(v.getId())
                             .place(v.getPlace())
                             .routeId(v.getRoute().getId())
-                            .arrivalTime(new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime())
+                            .order(v.getOrder())
+                            .arrivalTime(v.getArrivalTime() != null ? new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime() : null)
                             .build()).collect(Collectors.toList());
             ResponseDTO<TimetableDTO> response = ResponseDTO.<TimetableDTO>builder().data(dtos).build();
             return ResponseEntity.ok().body(response);
@@ -84,7 +87,8 @@ public class TimetableController {
                             .timetableId(v.getId())
                             .place(v.getPlace())
                             .routeId(v.getRoute().getId())
-                            .arrivalTime(new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime())
+                            .order(v.getOrder())
+                            .arrivalTime(v.getArrivalTime() != null ? new java.sql.Timestamp(v.getArrivalTime().getTime()).toLocalDateTime() : null)
                             .build()).collect(Collectors.toList());
             ResponseDTO<TimetableDTO> response = ResponseDTO.<TimetableDTO>builder().data(dtos).build();
             return ResponseEntity.ok().body(response);

@@ -21,6 +21,8 @@ public class Timetable {
     @GeneratedValue
     @Column(name="t_id")
     private Long id;
+    @Column(name="t_order")
+    private Integer order;
     @NotNull
     @Column(name="t_place", length = 50)
     private String place;

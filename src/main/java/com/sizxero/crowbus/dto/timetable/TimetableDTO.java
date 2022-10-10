@@ -18,6 +18,7 @@ import java.time.ZoneId;
 @Slf4j
 public class TimetableDTO {
     private Long timetableId;
+    private Integer order;
     private String place;
     private LocalDateTime arrivalTime;
     private Long routeId;
