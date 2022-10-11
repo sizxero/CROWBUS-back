@@ -1,10 +1,12 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.member.MemberDTO;
 import com.sizxero.crowbus.dto.member.signup.PassengerDTO;
 import com.sizxero.crowbus.dto.post.PostCreateDTO;
 import com.sizxero.crowbus.dto.post.PostReadDTO;
 import com.sizxero.crowbus.dto.post.PostReadDetailDTO;
+import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.entity.Member;
 import com.sizxero.crowbus.entity.Post;
 import com.sizxero.crowbus.entity.Route;
@@ -15,6 +17,7 @@ import com.sizxero.crowbus.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +37,7 @@ public class PostController {
     private RouteService routeService;
 
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody PostCreateDTO dto) {
+    public ResponseEntity<?> createPost(@AuthenticationPrincipal String id, @RequestBody PostCreateDTO dto) {
         try {
             Optional<Post> result = postService.createPost(
                     Post.builder()
@@ -42,7 +45,7 @@ public class PostController {
                             .boardType(dto.getBoardType())
                             .title(dto.getTitle())
                             .content(dto.getContents())
-                            .member(memberService.readOneMember(dto.getMemberId()).get())
+                            .member(memberService.readMemberByLoginId(id).get())
                             .route(routeService.readOneRouteById(dto.getRouteId()).get())
                             .build()
             );
@@ -52,8 +55,16 @@ public class PostController {
                                     PostReadDetailDTO.builder()
                                             .id(v.getId())
                                             .boardType(v.getBoardType())
-                                            .routeId(v.getRoute().getId())
-                                            .memberId(v.getMember().getId())
+                                            .route(RouteDTO.builder()
+                                                    .id(v.getRoute().getId())
+                                                    .name(v.getRoute().getName())
+                                                    .routeType(v.getRoute().getRouteType().name())
+                                                    .build())
+                                            .member(MemberDTO.builder()
+                                                    .id(v.getMember().getId())
+                                                    .name(v.getMember().getName())
+                                                    .loginId(v.getMember().getLoginId())
+                                                    .build())
                                             .hit(v.getHit())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())
@@ -89,8 +100,16 @@ public class PostController {
                                     PostReadDetailDTO.builder()
                                             .id(v.getId())
                                             .boardType(v.getBoardType())
-                                            .routeId(v.getRoute().getId())
-                                            .memberId(v.getMember().getId())
+                                            .route(RouteDTO.builder()
+                                                    .id(v.getRoute().getId())
+                                                    .name(v.getRoute().getName())
+                                                    .routeType(v.getRoute().getRouteType().name())
+                                                    .build())
+                                            .member(MemberDTO.builder()
+                                                    .id(v.getMember().getId())
+                                                    .name(v.getMember().getName())
+                                                    .loginId(v.getMember().getLoginId())
+                                                    .build())
                                             .hit(v.getHit())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())
@@ -114,8 +133,16 @@ public class PostController {
                                     PostReadDetailDTO.builder()
                                             .id(v.getId())
                                             .boardType(v.getBoardType())
-                                            .routeId(v.getRoute().getId())
-                                            .memberId(v.getMember().getId())
+                                            .route(RouteDTO.builder()
+                                                    .id(v.getRoute().getId())
+                                                    .name(v.getRoute().getName())
+                                                    .routeType(v.getRoute().getRouteType().name())
+                                                    .build())
+                                            .member(MemberDTO.builder()
+                                                    .id(v.getMember().getId())
+                                                    .name(v.getMember().getName())
+                                                    .loginId(v.getMember().getLoginId())
+                                                    .build())
                                             .hit(v.getHit())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())

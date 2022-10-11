@@ -33,4 +33,8 @@ public class MemberService {
     public Optional<BusDriver> readOneBusDriverByLoginId(String loginId) {
         return memberRepository.findBusDriverByLoginId(loginId);
     }
+
+    public Optional<Member> readMemberByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId);
+    }
 }

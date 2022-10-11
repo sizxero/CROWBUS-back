@@ -12,6 +12,6 @@ public class PostCreateDTO {
     private BoardType boardType;
     private String title;
     private String contents;
-    private Long memberId;
+    private String memberLoginId;
     private Long routeId;
 }
