@@ -1,5 +1,6 @@
 package com.sizxero.crowbus.dto.post;
 
+import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.entity.type.BoardType;
 import lombok.*;
 
@@ -12,10 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 public class PostReadDTO {
     private Long id;
-    private Long routeId;
+    private RouteDTO route;
     private BoardType boardType;
     private String title;
     private Integer hit;
-    private Long memberId;
-    private LocalDateTime createTime;
+    private String memberLoginId;
+    private LocalDateTime modifiedTime;
 }

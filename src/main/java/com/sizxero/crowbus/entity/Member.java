@@ -2,19 +2,20 @@ package com.sizxero.crowbus.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sizxero.crowbus.entity.type.RoleType;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @SuperBuilder
@@ -39,10 +40,12 @@ public class Member {
     @Column(name="m_type")
     private RoleType roleType;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="p_member_id")
     private List<Post> posts = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_member_id")
     private List<Reply> replies = new ArrayList<>();

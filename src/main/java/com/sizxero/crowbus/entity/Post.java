@@ -2,6 +2,8 @@ package com.sizxero.crowbus.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sizxero.crowbus.entity.common.BaseTimeEntity;
 import com.sizxero.crowbus.entity.type.BoardType;
 import com.sun.istack.NotNull;
@@ -33,10 +35,12 @@ public class Post extends BaseTimeEntity {
     @Column(name="p_hit")
     private Integer hit;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="rp_post_id")
     private List<Reply> replies = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="p_member_id")
     private Member member;
