@@ -9,4 +9,5 @@ import lombok.*;
 @Builder
 public class ReservationCreateDTO {
     private Long seatId;
+    private Long placeId;
 }

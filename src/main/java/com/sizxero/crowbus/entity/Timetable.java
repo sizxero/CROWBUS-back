@@ -41,4 +41,8 @@ public class Timetable {
         this.route = route;
         this.route.getTimetables().add(this);
     }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="rv_timetable_id")
+    private List<Reservation> reservations;
 }

@@ -1,6 +1,7 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.drive.DriveCreateDTO;
 import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.dto.timetable.TimetableDTO;
@@ -38,7 +39,7 @@ public class DriveController {
     private SeatService seatService;
 
     @PostMapping
-    public ResponseEntity<?> createDrive(@RequestBody DriveDTO dto) {
+    public ResponseEntity<?> createDrive(@RequestBody DriveCreateDTO dto) {
         try {
             Drive entity = Drive.builder()
                     .id(dto.getId())
@@ -46,7 +47,7 @@ public class DriveController {
                     .endDay(dto.getEndDay())
                     .busDriver(memberService.readOneBusDriver(dto.getDriverId()).get())
                     .bus(busService.readOneBus(dto.getBusId()).get())
-                    .route(routeService.readOneRouteById(dto.getRoute().getId()).get())
+                    .route(routeService.readOneRouteById(dto.getRouteId()).get())
                     .build();
             Optional<Drive> result = driveService.createDrive(entity);
             LocalDate start = dto.getStartDay();
@@ -76,8 +77,10 @@ public class DriveController {
                                             .map(vv -> TimetableDTO.builder()
                                                     .place(vv.getPlace())
                                                     .arrivalTime(
-                                                            new java.sql.Timestamp(vv.getArrivalTime().getTime())
+                                                            vv.getArrivalTime() != null
+                                                            ? new java.sql.Timestamp(vv.getArrivalTime().getTime())
                                                                     .toLocalDateTime()
+                                                                    : null
                                                     )
                                                     .order(vv.getOrder())
                                                     .build()).toList())

@@ -11,6 +11,7 @@ import com.sizxero.crowbus.entity.type.SeatType;
 import com.sizxero.crowbus.service.MemberService;
 import com.sizxero.crowbus.service.ReservationService;
 import com.sizxero.crowbus.service.SeatService;
+import com.sizxero.crowbus.service.TimetableService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,9 @@ public class ReservationController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private TimetableService timetableService;
+
     @PostMapping
     public ResponseEntity<?> createReservation(@AuthenticationPrincipal String id, @RequestBody ReservationCreateDTO dto) {
         try {
@@ -40,6 +44,7 @@ public class ReservationController {
                     .reservationType(ReservationType.탑승예정)
                     .passenger(memberService.readOnePassengerByLoginId(id).get())
                     .seat(seatService.readOneSeat(dto.getSeatId()).get())
+                    .timetable(timetableService.readOneTimetableById(dto.getPlaceId()).get())
                     .build();
             Optional<Reservation> result = reservationService.createReservation(entity);
             Seat seat = seatService.readOneSeat(dto.getSeatId()).get();
@@ -51,6 +56,7 @@ public class ReservationController {
                                     ReservationReadDTO.builder()
                                             .passengerId(v.getPassenger().getId())
                                             .seatId(v.getSeat().getId())
+                                            .place(v.getTimetable().getPlace())
                                             .reservationType(v.getReservationType())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())
@@ -77,6 +83,7 @@ public class ReservationController {
                                     ReservationReadDTO.builder()
                                             .passengerId(v.getPassenger().getId())
                                             .seatId(v.getSeat().getId())
+                                            .place(v.getTimetable().getPlace())
                                             .reservationType(v.getReservationType())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ReservationReadDTO {
     private Long passengerId;
     private Long seatId;
+    private String place;
     private ReservationType reservationType;
     private LocalDateTime createTime;
     private LocalDateTime modifiedTime;
