@@ -14,6 +14,7 @@ import com.sizxero.crowbus.service.SeatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,11 +34,11 @@ public class ReservationController {
     private SeatService seatService;
 
     @PostMapping
-    public ResponseEntity<?> createReservation(@RequestBody ReservationCreateDTO dto) {
+    public ResponseEntity<?> createReservation(@AuthenticationPrincipal String id, @RequestBody ReservationCreateDTO dto) {
         try {
             Reservation entity = Reservation.builder()
                     .reservationType(ReservationType.탑승예정)
-                    .passenger(memberService.readOnePassenger(dto.getPassengerId()).get())
+                    .passenger(memberService.readOnePassengerByLoginId(id).get())
                     .seat(seatService.readOneSeat(dto.getSeatId()).get())
                     .build();
             Optional<Reservation> result = reservationService.createReservation(entity);

@@ -42,6 +42,7 @@ public class SeatController {
                     .body(ResponseDTO.<SeatDTO>builder().data(
                             result.stream().map(v ->
                                     SeatDTO.builder()
+                                            .id(v.getId())
                                             .date(v.getDate())
                                             .seatNo(v.getSeatNo())
                                             .seatType(v.getSeatType())
@@ -56,6 +57,9 @@ public class SeatController {
     @GetMapping
     public ResponseEntity<?> readSeat(@RequestParam String date, @RequestParam String dvid, @RequestParam(required = false) String rsv) {
         try {
+            if(date == null || date.equals("") || date.equals("null") || date.equals("undefined"))
+                date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
             List<Seat> result;
             if(rsv == null || rsv.equals(""))
                 result = seatService.readSeats(LocalDate.parse(date, DateTimeFormatter.ISO_DATE), dvid);
@@ -65,6 +69,7 @@ public class SeatController {
                     .body(ResponseDTO.<SeatDTO>builder().data(
                             result.stream().map(v ->
                                     SeatDTO.builder()
+                                            .id(v.getId())
                                             .date(v.getDate())
                                             .seatNo(v.getSeatNo())
                                             .seatType(v.getSeatType())
@@ -86,6 +91,7 @@ public class SeatController {
                     .body(ResponseDTO.<SeatDTO>builder()
                             .data(result.stream().map(v ->
                                             SeatDTO.builder()
+                                                    .id(v.getId())
                                                     .date(v.getDate())
                                                     .seatNo(v.getSeatNo())
                                                     .seatType(v.getSeatType())

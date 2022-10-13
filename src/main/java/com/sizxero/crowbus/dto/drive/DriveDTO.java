@@ -1,5 +1,6 @@
 package com.sizxero.crowbus.dto.drive;
 
+import com.sizxero.crowbus.dto.route.RouteDTO;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,5 +16,5 @@ public class DriveDTO {
     private LocalDate endDay;
     private Long busId;
     private Long driverId;
-    private Long routeId;
+    private RouteDTO route;
 }

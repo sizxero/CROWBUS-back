@@ -2,6 +2,8 @@ package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
 import com.sizxero.crowbus.dto.drive.DriveDTO;
+import com.sizxero.crowbus.dto.route.RouteDTO;
+import com.sizxero.crowbus.dto.timetable.TimetableDTO;
 import com.sizxero.crowbus.entity.Drive;
 import com.sizxero.crowbus.entity.Seat;
 import com.sizxero.crowbus.entity.type.SeatType;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +46,7 @@ public class DriveController {
                     .endDay(dto.getEndDay())
                     .busDriver(memberService.readOneBusDriver(dto.getDriverId()).get())
                     .bus(busService.readOneBus(dto.getBusId()).get())
-                    .route(routeService.readOneRouteById(dto.getRouteId()).get())
+                    .route(routeService.readOneRouteById(dto.getRoute().getId()).get())
                     .build();
             Optional<Drive> result = driveService.createDrive(entity);
             LocalDate start = dto.getStartDay();
@@ -65,7 +68,20 @@ public class DriveController {
                             .startDay(v.getStartDay())
                             .endDay(v.getEndDay())
                             .driverId(v.getBusDriver().getId())
-                            .routeId(v.getRoute().getId())
+                            .route(RouteDTO.builder()
+                                    .id(v.getRoute().getId())
+                                    .name(v.getRoute().getName())
+                                    .routeType(v.getRoute().getRouteType().name())
+                                    .timetables(v.getRoute().getTimetables().stream()
+                                            .map(vv -> TimetableDTO.builder()
+                                                    .place(vv.getPlace())
+                                                    .arrivalTime(
+                                                            new java.sql.Timestamp(vv.getArrivalTime().getTime())
+                                                                    .toLocalDateTime()
+                                                    )
+                                                    .order(vv.getOrder())
+                                                    .build()).toList())
+                                    .build())
                             .busId(v.getBus().getId())
                             .build()).toList();
             return ResponseEntity.ok()
@@ -76,13 +92,18 @@ public class DriveController {
     }
 
     @GetMapping
-    public ResponseEntity<?> readDrive(@RequestParam(required = false) String id, @RequestParam(required = false) String dvid) {
+    public ResponseEntity<?> readDrive(@RequestParam(required = false) String id,
+                                       @RequestParam(required = false) String dvid,
+                                       @RequestParam(required = false) String date) {
         try {
+            if(date == null || date.equals("") || date.equals("null") || date.equals("undefined"))
+                date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));;
+
             List<DriveDTO> dtos;
             if(id == null || id.equals("")) {
                 List<Drive> multiResult;
                 if(dvid == null || dvid.equals(""))
-                    multiResult = driveService.readAllDrive();
+                    multiResult = driveService.readDrivesByDate(date);
                 else
                     multiResult = driveService.readDrivesByDriverId(Long.parseLong(dvid));
 
@@ -92,7 +113,21 @@ public class DriveController {
                                 .startDay(v.getStartDay())
                                 .endDay(v.getEndDay())
                                 .driverId(v.getBusDriver().getId())
-                                .routeId(v.getRoute().getId())
+                                .route(RouteDTO.builder()
+                                        .id(v.getRoute().getId())
+                                        .name(v.getRoute().getName())
+                                        .routeType(v.getRoute().getRouteType().name())
+                                        .timetables(v.getRoute().getTimetables().stream()
+                                                .map(vv -> TimetableDTO.builder()
+                                                        .place(vv.getPlace())
+                                                        .arrivalTime(
+                                                                vv.getArrivalTime() != null
+                                                                ?new java.sql.Timestamp(vv.getArrivalTime().getTime())
+                                                                        .toLocalDateTime() : null
+                                                                )
+                                                        .order(vv.getOrder())
+                                                        .build()).toList())
+                                        .build())
                                 .busId(v.getBus().getId())
                                 .build()).toList();
             } else {
@@ -103,7 +138,20 @@ public class DriveController {
                                 .startDay(v.getStartDay())
                                 .endDay(v.getEndDay())
                                 .driverId(v.getBusDriver().getId())
-                                .routeId(v.getRoute().getId())
+                                .route(RouteDTO.builder()
+                                        .id(v.getRoute().getId())
+                                        .name(v.getRoute().getName())
+                                        .routeType(v.getRoute().getRouteType().name())
+                                        .timetables(v.getRoute().getTimetables().stream()
+                                                .map(vv -> TimetableDTO.builder()
+                                                        .place(vv.getPlace())
+                                                        .arrivalTime(
+                                                                new java.sql.Timestamp(vv.getArrivalTime().getTime())
+                                                                        .toLocalDateTime()
+                                                        )
+                                                        .order(vv.getOrder())
+                                                        .build()).toList())
+                                        .build())
                                 .busId(v.getBus().getId())
                                 .build()).toList();
             }
@@ -112,5 +160,12 @@ public class DriveController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/find")
+    public Long readDriveIdWithRouteIdAndDate(@RequestParam String rid, @RequestParam String date) {
+        if(date == null || date.equals("") || date.equals("null") || date.equals("undefined"))
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));;
+        return driveService.readDriveIdByRouteIdAndDate(rid, date);
     }
 }

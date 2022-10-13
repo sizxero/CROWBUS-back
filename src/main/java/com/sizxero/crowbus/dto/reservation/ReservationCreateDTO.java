@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ReservationCreateDTO {
-    private Long passengerId;
     private Long seatId;
 }

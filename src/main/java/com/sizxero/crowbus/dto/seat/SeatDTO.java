@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class SeatDTO {
+    private Long id;
     private LocalDate date;
     private Integer seatNo;
     private SeatType seatType;
