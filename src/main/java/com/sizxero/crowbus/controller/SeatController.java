@@ -1,7 +1,10 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.bus.BusDTO;
+import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationReadDTO;
+import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.dto.seat.SeatDTO;
 import com.sizxero.crowbus.dto.seat.SeatUpdateDTO;
 import com.sizxero.crowbus.entity.Reservation;
@@ -35,7 +38,7 @@ public class SeatController {
                     .date(dto.getDate())
                     .seatNo(dto.getSeatNo())
                     .seatType(dto.getSeatType())
-                    .drive(driveService.readOneDrive(dto.getDriveId()).get())
+                    .drive(driveService.readOneDrive(dto.getDrive().getId()).get())
                     .build();
             Optional<Seat> result = seatService.createSeat(entity);
             return ResponseEntity.ok()
@@ -46,7 +49,15 @@ public class SeatController {
                                             .date(v.getDate())
                                             .seatNo(v.getSeatNo())
                                             .seatType(v.getSeatType())
-                                            .driveId(v.getDrive().getId())
+                                            .drive(DriveDTO.builder()
+                                                    .bus(BusDTO.builder()
+                                                            .busNum(v.getDrive().getBus().getBusNum())
+                                                            .build())
+                                                    .route(RouteDTO.builder()
+                                                            .name(v.getDrive().getRoute().getName())
+                                                            .routeType(v.getDrive().getRoute().getRouteType().name())
+                                                            .build())
+                                                    .build())
                                             .build()).toList()
                     ).build());
         } catch(Exception e) {
@@ -73,7 +84,15 @@ public class SeatController {
                                             .date(v.getDate())
                                             .seatNo(v.getSeatNo())
                                             .seatType(v.getSeatType())
-                                            .driveId(v.getDrive().getId())
+                                            .drive(DriveDTO.builder()
+                                                    .bus(BusDTO.builder()
+                                                            .busNum(v.getDrive().getBus().getBusNum())
+                                                            .build())
+                                                    .route(RouteDTO.builder()
+                                                            .name(v.getDrive().getRoute().getName())
+                                                            .routeType(v.getDrive().getRoute().getRouteType().name())
+                                                            .build())
+                                                    .build())
                                             .build()).toList()
                     ).build());
         } catch(Exception e) {
@@ -95,7 +114,15 @@ public class SeatController {
                                                     .date(v.getDate())
                                                     .seatNo(v.getSeatNo())
                                                     .seatType(v.getSeatType())
-                                                    .driveId(v.getDrive().getId())
+                                                    .drive(DriveDTO.builder()
+                                                            .bus(BusDTO.builder()
+                                                                    .busNum(v.getDrive().getBus().getBusNum())
+                                                                    .build())
+                                                            .route(RouteDTO.builder()
+                                                                    .name(v.getDrive().getRoute().getName())
+                                                                    .routeType(v.getDrive().getRoute().getRouteType().name())
+                                                                    .build())
+                                                            .build())
                                                     .build())
                                     .toList())
                             .build());

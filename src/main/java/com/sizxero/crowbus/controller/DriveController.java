@@ -1,6 +1,7 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.bus.BusDTO;
 import com.sizxero.crowbus.dto.drive.DriveCreateDTO;
 import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.route.RouteDTO;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -78,14 +80,17 @@ public class DriveController {
                                                     .place(vv.getPlace())
                                                     .arrivalTime(
                                                             vv.getArrivalTime() != null
-                                                            ? new java.sql.Timestamp(vv.getArrivalTime().getTime())
+                                                            ? new Timestamp(vv.getArrivalTime().getTime())
                                                                     .toLocalDateTime()
                                                                     : null
                                                     )
                                                     .order(vv.getOrder())
                                                     .build()).toList())
                                     .build())
-                            .busId(v.getBus().getId())
+                            .bus(BusDTO.builder()
+                                    .id(v.getBus().getId())
+                                    .busNum(v.getBus().getBusNum())
+                                    .build())
                             .build()).toList();
             return ResponseEntity.ok()
                     .body(ResponseDTO.<DriveDTO>builder().data(dtos).build());
@@ -131,7 +136,10 @@ public class DriveController {
                                                         .order(vv.getOrder())
                                                         .build()).toList())
                                         .build())
-                                .busId(v.getBus().getId())
+                                .bus(BusDTO.builder()
+                                        .id(v.getBus().getId())
+                                        .busNum(v.getBus().getBusNum())
+                                        .build())
                                 .build()).toList();
             } else {
                 Optional<Drive> singleResult = driveService.readOneDrive(Long.parseLong(id));
@@ -155,7 +163,10 @@ public class DriveController {
                                                         .order(vv.getOrder())
                                                         .build()).toList())
                                         .build())
-                                .busId(v.getBus().getId())
+                                .bus(BusDTO.builder()
+                                        .id(v.getBus().getId())
+                                        .busNum(v.getBus().getBusNum())
+                                        .build())
                                 .build()).toList();
             }
             return ResponseEntity.ok()

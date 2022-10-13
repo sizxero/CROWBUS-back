@@ -1,5 +1,6 @@
 package com.sizxero.crowbus.dto.seat;
 
+import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.entity.type.SeatType;
 import lombok.*;
 
@@ -15,5 +16,5 @@ public class SeatDTO {
     private LocalDate date;
     private Integer seatNo;
     private SeatType seatType;
-    private Long driveId;
+    private DriveDTO drive;
 }

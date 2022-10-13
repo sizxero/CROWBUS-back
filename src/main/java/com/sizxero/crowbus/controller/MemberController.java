@@ -1,11 +1,16 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.bus.BusDTO;
+import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.member.mypage.BusDriverReadDTO;
 import com.sizxero.crowbus.dto.member.mypage.PassengerReadDTO;
 import com.sizxero.crowbus.dto.member.signup.BusDriverDTO;
 import com.sizxero.crowbus.dto.member.signup.PassengerDTO;
+import com.sizxero.crowbus.dto.reservation.ReservationReadDTO;
 import com.sizxero.crowbus.dto.route.RouteDTO;
+import com.sizxero.crowbus.dto.seat.SeatDTO;
+import com.sizxero.crowbus.dto.timetable.TimetableDTO;
 import com.sizxero.crowbus.entity.member.BusDriver;
 import com.sizxero.crowbus.entity.member.Passenger;
 import com.sizxero.crowbus.entity.type.RoleType;
@@ -44,6 +49,33 @@ public class MemberController {
                                         .name(v.getFavoriteRoute().getName())
                                         .routeType(v.getFavoriteRoute().getRouteType().name())
                                         .build())
+                                .reservations(v.getReservations() == null
+                                ? null
+                                : v.getReservations().stream().map(vv ->
+                                    ReservationReadDTO.builder()
+                                            .place(TimetableDTO.builder()
+                                                    .place(vv.getTimetable().getPlace())
+                                                    .arrivalTime(vv.getTimetable() == null
+                                                            ? null
+                                                            : new java.sql.Timestamp(vv.getTimetable().getArrivalTime().getTime()).toLocalDateTime())
+                                                    .build())
+                                            .reservationType(vv.getReservationType())
+                                            .modifiedTime(vv.getModifiedTime())
+                                            .seat(SeatDTO.builder()
+                                                    .seatNo(vv.getSeat().getSeatNo())
+                                                    .date(vv.getSeat().getDate())
+                                                    .drive(DriveDTO.builder()
+                                                            .bus(BusDTO.builder()
+                                                                    .busNum(vv.getSeat().getDrive().getBus().getBusNum())
+                                                                    .build())
+                                                            .route(RouteDTO.builder()
+                                                                    .name(vv.getSeat().getDrive().getRoute().getName())
+                                                                    .routeType(vv.getSeat().getDrive().getRoute().getRouteType().name())
+                                                                    .build())
+                                                            .build())
+                                                    .build())
+                                            .build()
+                                ).toList())
                                 .build()).toList();
                 return ResponseEntity.ok().body(
                         ResponseDTO.<PassengerReadDTO>builder()
@@ -58,6 +90,18 @@ public class MemberController {
                                 .name(v.getName())
                                 .phone(v.getPhone())
                                 .license(v.getDriverLicenseNo())
+                                .drives(v.getDrives().stream().map(vv ->
+                                        DriveDTO.builder()
+                                                .startDay(vv.getStartDay())
+                                                .endDay(vv.getEndDay())
+                                                .route(RouteDTO.builder()
+                                                        .name(vv.getRoute().getName())
+                                                        .routeType(vv.getRoute().getRouteType().name())
+                                                        .build())
+                                                .bus(BusDTO.builder()
+                                                        .busNum(vv.getBus().getBusNum())
+                                                        .build())
+                                                .build()).toList())
                                 .build()).toList();
                 return ResponseEntity.ok().body(
                         ResponseDTO.<BusDriverReadDTO>builder()

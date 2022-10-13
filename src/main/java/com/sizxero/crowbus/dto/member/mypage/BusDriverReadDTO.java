@@ -1,6 +1,9 @@
 package com.sizxero.crowbus.dto.member.mypage;
 
+import com.sizxero.crowbus.dto.drive.DriveDTO;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,4 +15,5 @@ public class BusDriverReadDTO {
     private String name;
     private String phone;
     private String license;
+    private List<DriveDTO> drives;
 }

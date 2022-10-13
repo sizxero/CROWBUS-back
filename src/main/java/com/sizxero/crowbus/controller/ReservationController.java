@@ -1,9 +1,14 @@
 package com.sizxero.crowbus.controller;
 
 import com.sizxero.crowbus.dto.ResponseDTO;
+import com.sizxero.crowbus.dto.bus.BusDTO;
+import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationCreateDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationReadDTO;
 import com.sizxero.crowbus.dto.reservation.ReservationUpdateDTO;
+import com.sizxero.crowbus.dto.route.RouteDTO;
+import com.sizxero.crowbus.dto.seat.SeatDTO;
+import com.sizxero.crowbus.dto.timetable.TimetableDTO;
 import com.sizxero.crowbus.entity.Reservation;
 import com.sizxero.crowbus.entity.Seat;
 import com.sizxero.crowbus.entity.type.ReservationType;
@@ -55,8 +60,25 @@ public class ReservationController {
                             .data(result.stream().map(v ->
                                     ReservationReadDTO.builder()
                                             .passengerId(v.getPassenger().getId())
-                                            .seatId(v.getSeat().getId())
-                                            .place(v.getTimetable().getPlace())
+                                            .seat(SeatDTO.builder()
+                                                    .seatNo(v.getSeat().getSeatNo())
+                                                    .date(v.getSeat().getDate())
+                                                    .drive(DriveDTO.builder()
+                                                            .bus(BusDTO.builder()
+                                                                    .busNum(v.getSeat().getDrive().getBus().getBusNum())
+                                                                    .build())
+                                                            .route(RouteDTO.builder()
+                                                                    .name(v.getSeat().getDrive().getRoute().getName())
+                                                                    .routeType(v.getSeat().getDrive().getRoute().getRouteType().name())
+                                                                    .build())
+                                                            .build())
+                                                    .build())
+                                            .place(TimetableDTO.builder()
+                                                    .place(v.getTimetable().getPlace())
+                                                    .arrivalTime(v.getTimetable() == null
+                                                            ? null
+                                                            : new java.sql.Timestamp(v.getTimetable().getArrivalTime().getTime()).toLocalDateTime())
+                                                    .build())
                                             .reservationType(v.getReservationType())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())
@@ -82,8 +104,25 @@ public class ReservationController {
                             .data(result.stream().map(v ->
                                     ReservationReadDTO.builder()
                                             .passengerId(v.getPassenger().getId())
-                                            .seatId(v.getSeat().getId())
-                                            .place(v.getTimetable().getPlace())
+                                            .seat(SeatDTO.builder()
+                                                    .seatNo(v.getSeat().getSeatNo())
+                                                    .date(v.getSeat().getDate())
+                                                    .drive(DriveDTO.builder()
+                                                            .bus(BusDTO.builder()
+                                                                    .busNum(v.getSeat().getDrive().getBus().getBusNum())
+                                                                    .build())
+                                                            .route(RouteDTO.builder()
+                                                                    .name(v.getSeat().getDrive().getRoute().getName())
+                                                                    .routeType(v.getSeat().getDrive().getRoute().getRouteType().name())
+                                                                    .build())
+                                                            .build())
+                                                    .build())
+                                            .place(TimetableDTO.builder()
+                                                    .place(v.getTimetable().getPlace())
+                                                    .arrivalTime(v.getTimetable() == null
+                                                            ? null
+                                                            : new java.sql.Timestamp(v.getTimetable().getArrivalTime().getTime()).toLocalDateTime())
+                                                    .build())
                                             .reservationType(v.getReservationType())
                                             .createTime(v.getCreateTime())
                                             .modifiedTime(v.getModifiedTime())
@@ -115,7 +154,19 @@ public class ReservationController {
                             .data(result.stream().map(v ->
                                             ReservationReadDTO.builder()
                                                     .reservationType(v.getReservationType())
-                                                    .seatId(v.getSeat().getId())
+                                                    .seat(SeatDTO.builder()
+                                                            .seatNo(v.getSeat().getSeatNo())
+                                                            .date(v.getSeat().getDate())
+                                                            .drive(DriveDTO.builder()
+                                                                    .bus(BusDTO.builder()
+                                                                            .busNum(v.getSeat().getDrive().getBus().getBusNum())
+                                                                            .build())
+                                                                    .route(RouteDTO.builder()
+                                                                            .name(v.getSeat().getDrive().getRoute().getName())
+                                                                            .routeType(v.getSeat().getDrive().getRoute().getRouteType().name())
+                                                                            .build())
+                                                                    .build())
+                                                            .build())
                                                     .passengerId(v.getPassenger().getId())
                                                     .createTime(v.getCreateTime())
                                                     .modifiedTime(v.getModifiedTime())
