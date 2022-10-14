@@ -186,7 +186,7 @@ public class DriveController {
     }
 
     @GetMapping("/curr")
-    public ResponseEntity<?> readDriveCurr(@RequestParam String dt, @AuthenticationPrincipal String id) {
+    public ResponseEntity<?> readDriveCurr(@RequestParam(required = false) String dt, @AuthenticationPrincipal String id) {
         try {
             if(dt == null || dt.equals("") || dt.equals("null") || dt.equals("undefined"))
                 dt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
