@@ -1,5 +1,6 @@
 package com.sizxero.crowbus.service;
 
+import com.sizxero.crowbus.dto.drive.DriveCurrDTO;
 import com.sizxero.crowbus.entity.Drive;
 import com.sizxero.crowbus.entity.Reservation;
 import com.sizxero.crowbus.entity.Seat;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,5 +73,11 @@ public class SeatService {
             seatRepository.save(seat);
         });
         return seatRepository.findById(entity.getId());
+    }
+
+    public Integer currentDrive(String date, Long dvid) {
+        LocalDate ld = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+        Drive drive = driveRepository.findById(dvid).get();
+        return seatRepository.countSeatByDateAndDriveAndSeatType(ld, drive, SeatType.예약불가);
     }
 }

@@ -3,6 +3,7 @@ package com.sizxero.crowbus.controller;
 import com.sizxero.crowbus.dto.ResponseDTO;
 import com.sizxero.crowbus.dto.bus.BusDTO;
 import com.sizxero.crowbus.dto.drive.DriveCreateDTO;
+import com.sizxero.crowbus.dto.drive.DriveCurrDTO;
 import com.sizxero.crowbus.dto.drive.DriveDTO;
 import com.sizxero.crowbus.dto.route.RouteDTO;
 import com.sizxero.crowbus.dto.timetable.TimetableDTO;
@@ -13,6 +14,7 @@ import com.sizxero.crowbus.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -179,7 +181,35 @@ public class DriveController {
     @GetMapping("/find")
     public Long readDriveIdWithRouteIdAndDate(@RequestParam String rid, @RequestParam String date) {
         if(date == null || date.equals("") || date.equals("null") || date.equals("undefined"))
-            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));;
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         return driveService.readDriveIdByRouteIdAndDate(rid, date);
+    }
+
+    @GetMapping("/curr")
+    public ResponseEntity<?> readDriveCurr(@RequestParam String dt, @AuthenticationPrincipal String id) {
+        try {
+            if(dt == null || dt.equals("") || dt.equals("null") || dt.equals("undefined"))
+                dt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            List<Drive> mySchedules = driveService.readDrivesByDriverId(memberService.readOneBusDriverByLoginId(id).get().getId());
+            String finalDt = dt;
+            List<DriveCurrDTO> dtos = mySchedules.stream().map(v ->
+                    DriveCurrDTO.builder()
+                            .date(LocalDate.parse(finalDt, DateTimeFormatter.ISO_DATE))
+                            .drive(DriveDTO.builder()
+                                    .id(v.getId())
+                                    .bus(BusDTO.builder()
+                                            .busNum(v.getBus().getBusNum())
+                                            .build())
+                                    .route(RouteDTO.builder()
+                                            .name(v.getRoute().getName())
+                                            .routeType(v.getRoute().getRouteType().name())
+                                            .build())
+                                    .build())
+                            .rsv(seatService.currentDrive(finalDt, v.getId()))
+                            .build()).toList();
+            return ResponseEntity.ok().body(dtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

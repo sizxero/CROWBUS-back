@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface DriveRepository extends JpaRepository<Drive, Long> {
     List<Drive> findDrivesByBusDriverId(Long id);
+
     @Query("select d from Drive d where :now between d.startDay and d.endDay")
     List<Drive> findDrivesByDate(LocalDate now);
 
