@@ -28,7 +28,7 @@ public class Member {
     @Column(name="m_login_id", length = 20)
     private String loginId;
     @NotNull
-    @Column(name="m_pw", length = 20)
+    @Column(name="m_pw")
     private String pw;
     @NotNull
     @Column(name="m_name", length = 15)
