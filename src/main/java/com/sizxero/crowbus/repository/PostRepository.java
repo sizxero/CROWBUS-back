@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByBoardType(BoardType bt, Pageable pageable);
-    Page<Post> findByBoardTypeAndRoute(BoardType bt, Route r, Pageable pageable);
+    Page<Post> findByBoardTypeAndRouteOrderByIdDesc(BoardType bt, Route r, Pageable pageable);
 }

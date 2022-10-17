@@ -58,7 +58,7 @@ public class PostService {
 
     public Page<Post> readPostsByBoardTypeAndRoutePageable(String bt, String rId, String page) {
         PageRequest pr = PageRequest.of(Integer.parseInt(page), 10);
-        return postRepository.findByBoardTypeAndRoute(BoardType.valueOf(bt),
+        return postRepository.findByBoardTypeAndRouteOrderByIdDesc(BoardType.valueOf(bt),
                 routeRepository.findById(Long.parseLong(rId)).get(), pr);
     }
 }

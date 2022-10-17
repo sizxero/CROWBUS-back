@@ -55,7 +55,7 @@ public class MemberController {
                                     ReservationReadDTO.builder()
                                             .place(TimetableDTO.builder()
                                                     .place(vv.getTimetable().getPlace())
-                                                    .arrivalTime(vv.getTimetable() == null
+                                                    .arrivalTime(vv.getTimetable().getArrivalTime() == null
                                                             ? null
                                                             : new java.sql.Timestamp(vv.getTimetable().getArrivalTime().getTime()).toLocalDateTime())
                                                     .build())
